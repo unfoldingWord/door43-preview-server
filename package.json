@@ -1,6 +1,6 @@
 {
-  "name": "puppeteer-html2pdf",
-  "version": "2.0.0",
+  "name": "door43-preview-server",
+  "version": "1.0.0",
   "description": "Print your HTML to PDF via Puppeteer in a Docker container. It's all in the repo name 👌",
   "main": "src/index.js",
   "scripts": {
@@ -18,7 +18,9 @@
     "chrome",
     "headless",
     "puppeteer",
-    "docker"
+    "docker",
+    "dcs",
+    "unfoldingWord"
   ],
   "author": "Eric NICOLAS <ccjmne@gmail.com> (ccjmne)",
   "license": "MIT",
@@ -28,12 +30,13 @@
   "homepage": "https://github.com/ccjmne/puppeteer-html2pdf#readme",
   "dependencies": {
     "body-parser": "^1.20.2",
+    "connect-timeout": "^1.9.0",
     "cors": "^2.8.5",
-    "express": "^4.18.2",
+    "express": "^4.19.2",
     "express-query-boolean": "^2.0.0",
     "express-query-int": "^3.0.0",
-    "pdfjs": "^2.5.2",
-    "puppeteer-core": "^21.5.2",
+    "pdfjs": "^2.5.3",
+    "puppeteer-core": "^22.9.0",
     "tmp": "^0.2.1"
   },
   "devDependencies": {

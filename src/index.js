@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const booleanParser = require('express-query-boolean');
 const numberParser = require('express-query-int');
 const cors = require('cors');
+const timeout = require('connect-timeout');
 
 const pdf = require('pdfjs');
 const tmp = require('tmp');
@@ -10,9 +11,11 @@ const tmp = require('tmp');
 const app = express();
 const port = 3000;
 
-const limit = process.env.BODY_LIMIT || '1mb';
+const limit = process.env.BODY_LIMIT || '20mb';
+const time = process.env.TIMEOUT || '5m';
 
 app.use(express.json({ limit }));
+app.use(timeout(time));
 app.use(bodyParser.text({ type: 'text/html', limit }));
 app.use(booleanParser());
 app.use(numberParser());
