@@ -1,11 +1,10 @@
 name: Docker Image CI
 
 on:
-  release:
-    types: [ published ]
-
+  push:
+    branches: [main]
+    
 jobs:
-
   build_push:
     name: Build and push Docker image to GitHub Packages
 
@@ -45,5 +44,5 @@ jobs:
           platforms: amd64,arm64
           push: true
           tags: |
-            unfoldingword/door43-preview-server:${{ env.TAG_VERSION }}
             unfoldingword/door43-preview-server:latest
+          # unfoldingword/door43-preview-server:${{ env.TAG_VERSION }}
