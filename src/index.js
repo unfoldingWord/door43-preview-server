@@ -15,15 +15,19 @@ const limit = process.env.BODY_LIMIT || '20mb';
 const time = process.env.TIMEOUT || '5m';
 
 app.use(express.json({ limit }));
-app.use(timeout(time));
+app.use(timeout(3000000));
 app.use(bodyParser.text({ type: 'text/html', limit }));
 app.use(booleanParser());
 app.use(numberParser());
 
 async function print({ browser, htmlContents, options }) {
   const page = await browser.newPage();
-  await page.setContent(htmlContents, { waitUntil: 'networkidle0' });
-  return page.pdf(options);
+  console.log("HERE", htmlContents, options);
+  await page.setContent(htmlContents, { waitUntil: 'networkidle0', timeout: 1800000 });
+  console.log("Generating PDF...");
+  const pdf = page.pdf(options);
+  console.log("Done.");
+  return pdf;
 }
 
 function parseRequest(request) {
@@ -33,10 +37,22 @@ function parseRequest(request) {
   };
 }
 
+function convertToMs(str) {
+  const units = str.slice(-1);
+  const value = Number(str.slice(0, -1));
+
+  switch(units) {
+    case 's': return value * 1000;
+    case 'm': return value * 1000 * 60;
+    case 'h': return value * 1000 * 60 * 60;
+    default: throw new Error('Invalid time unit');
+  }
+}
+
 export function use(puppeteer) {
   function launchBrowser() {
     return puppeteer.launch({
-      executablePath: 'chromium-browser',
+      executablePath: '/usr/bin/chromium-browser',
       headless: 'new',
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
@@ -83,11 +99,13 @@ export function use(puppeteer) {
     response.status(500).send(err.stack);
   });
 
-  app.listen(port, (err) => {
+  const server = app.listen(port, (err) => {
     if (err) {
       return console.error('ERROR: ', err);
     }
 
     console.log(`HTML to PDF converter listening on port: ${port}`);
   });
+
+  server.timeout = 3000000;
 }
