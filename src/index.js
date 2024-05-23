@@ -25,6 +25,11 @@ async function print({ browser, htmlContents, options }) {
     const page = await browser.newPage();
     console.log('HERE', htmlContents, options);
     await page.setContent(htmlContents, { waitUntil: 'networkidle0', timeout: 1800000 });
+    await page.evaluate(() => {
+      return new Promise((resolve) => {
+        window.addEventListener('pagedjs-complete', resolve);
+      });
+    });
     console.log('Generating PDF...');
     const pdf = await page.pdf(options);
     console.log('Done.');
